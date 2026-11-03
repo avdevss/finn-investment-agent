@@ -1,0 +1,13 @@
+.env
+.venv/
+cache/
+node_modules/
+__pycache__/
+*.pyc
+.next/
+.DS_Store
+.claude/settings.local.json
+PLAN.md
+CLAUDE.md
+.claude/
+COVERING_NOTE.md
