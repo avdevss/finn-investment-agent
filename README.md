@@ -3,6 +3,7 @@
 FINN is a mobile-first research agent for Indian listed companies. It reads every corporate filing a portfolio produces, decides which ones matter, and keeps a ledger of what management promised on earnings calls against what the company actually reported.
 
 **Live app:** https://web-pink-rho-96.vercel.app
+**Repo:** https://github.com/avdevss/finn-investment-agent
 
 It is a triage queue for filings, not a dashboard. The default screen answers one question: of everything my 18 companies filed in the last 24 hours, what do I need to read? Every number on screen can be traced back to its source:
 - tap a materiality score to see its arithmetic
@@ -91,7 +92,7 @@ Management makes quantified commitments on every earnings call: growth targets, 
    - whoever holds the floor before Q&A starts
    - prose introductions
 
-   Every company lands between 49% and 100% of its text attributed to management. Transcripts with no labels are recorded as `unsegmented`, not claimed as filtered.
+   Every company lands between 49% and 100% of its text attributed to management. This works where the transcript layout allows it: 78 of 80 transcripts were segmented by speaker, 2 were not and are recorded as `unsegmented` rather than claimed as filtered, and ICICIBANK is only partly separated. The bias is deliberate: an unrecognised voice is treated as an analyst, because losing a commitment is better than inventing one.
 3. **A deterministic gate.** A 20,000-character chunk with no digit and no forward-looking verb never reaches a model.
 4. **Pass 1, gemini-3.5-flash-lite:** candidate sentences, copied exactly.
 5. **Verbatim check, in code:** each returned sentence must be a whitespace-normalised substring of its own chunk. Measured: **88 invented or altered sentences rejected**. On RELIANCE, the model invented two management commitments that appear nowhere in the document.
@@ -153,6 +154,8 @@ Counted from the model client's disk cache (one entry per answered call) and the
 | **Total** | **433** | **1,374,731** | **77,194** |
 
 The ingest flash-lite row includes 15 calls that requested tier 3 and were answered by flash-lite, the model each of those rows records.
+
+240 of 296 filings (81%) were classified by rules and the exchange subcategory with no model. The cheap model handled 16, 15 were re-read from the PDF, and 25 vague titles were held at low weight instead of guessed.
 
 **Actual spend: ₹0.** Everything ran on the Gemini free tier.
 
